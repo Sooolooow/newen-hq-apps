@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEWEN Ops Dashboard</title>
+<style>
+  :root { --bg:#07070a; --steel:#aab; --accent:#7c5cff; --panel:#101018; --green:#2ecc71; --amber:#f1c40f; --red:#e74c3c; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--steel); font-family:'Inter',system-ui,sans-serif; padding:24px; }
+  h1 { font-size:1.3rem; letter-spacing:.08em; margin-bottom:4px; }
+  .sub { color:#555; font-size:.8rem; margin-bottom:20px; }
+  .tiles { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin-bottom:20px; }
+  .tile { background:var(--panel); border:1px solid #1c1c28; border-radius:12px; padding:16px; }
+  .tile .v { font-size:1.8rem; font-weight:700; color:#fff; }
+  .tile .l { font-size:.7rem; text-transform:uppercase; letter-spacing:.1em; color:#666; margin-top:4px; }
+  .tile .d { font-size:.75rem; margin-top:6px; }
+  .up { color:var(--green); } .down { color:var(--red); }
+  .queue { background:var(--panel); border:1px solid #1c1c28; border-radius:12px; padding:16px; }
+  .qi { display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #16161f; font-size:.85rem; }
+  .qi:last-child { border:none; }
+  .dot { width:8px; height:8px; border-radius:50%; display:inline-block; margin-right:8px; }
+</style>
+</head>
+<body>
+  <h1>NEWEN OPS DASHBOARD</h1>
+  <div class="sub">Reflect. Respect. Resolve. · live across all lanes</div>
+  <div class="tiles" id="tiles"></div>
+  <div class="queue">
+    <div style="font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;color:#666;margin-bottom:8px">Action Queue</div>
+    <div id="queue"></div>
+  </div>
+<script>
+const TILES=[
+  {v:'$48.2k',l:'QBO Revenue MTD',d:'<span class="up">↑ 12%</span> vs last mo',c:'#7c5cff'},
+  {v:'$31.4k',l:'AR Outstanding',d:'<span class="down">↓ 8%</span> collected',c:'#2ecc71'},
+  {v:'6',l:'Active Builds',d:'ABNB · LCS · Dog House',c:'#f1c40f'},
+  {v:'3',l:'Lanes Live',d:'Consulting · Ent · AI',c:'#e74c3c'},
+];
+const Q=[
+  {t:'LCS-1042 install sign-off',s:'#2ecc71',p:'High'},
+  {t:'ABNB PR #12 review',s:'#f1c40f',p:'Med'},
+  {t:'NewenHQ blog publish',s:'#7c5cff',p:'Low'},
+  {t:'QBO sync reconcile',s:'#e74c3c',p:'High'},
+  {t:'Client follow-up: Apple',s:'#2ecc71',p:'Med'},
+];
+document.getElementById('tiles').innerHTML=TILES.map(t=>`<div class="tile"><div class="v" style="color:${t.c}">${t.v}</div><div class="l">${t.l}</div><div class="d">${t.d}</div></div>`).join('');
+document.getElementById('queue').innerHTML=Q.map(q=>`<div class="qi"><span><span class="dot" style="background:${q.s}"></span>${q.t}</span><span style="color:#555;font-size:.7rem">${q.p}</span></div>`).join('');
+</script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEWEN Roundtable</title>
+<style>
+  :root { --bg:#07070a; --steel:#aab; --accent:#7c5cff; --panel:#101018; --gpt:#10a37f; --claude:#d97757; --gemini:#4285f4; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--steel); font-family:'Inter',system-ui,sans-serif; padding:24px; max-width:800px; }
+  h1 { font-size:1.3rem; letter-spacing:.08em; margin-bottom:4px; }
+  .sub { color:#555; font-size:.8rem; margin-bottom:20px; }
+  .ask { background:var(--panel); border:1px solid #1c1c28; border-radius:12px; padding:16px; margin-bottom:16px; }
+  textarea { width:100%; background:#0a0a12; border:1px solid #222; color:var(--steel); padding:12px; border-radius:8px; font-size:.9rem; min-height:60px; resize:vertical; }
+  .btn { background:var(--accent); color:#fff; border:none; padding:10px 18px; border-radius:8px; font-weight:600; cursor:pointer; }
+  .round { margin-bottom:14px; }
+  .model { display:flex; gap:10px; margin-bottom:8px; }
+  .avatar { width:28px; height:28px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:.7rem; font-weight:700; color:#fff; flex-shrink:0; }
+  .bubble { background:var(--panel); border:1px solid #1c1c28; border-radius:10px; padding:10px 14px; font-size:.85rem; line-height:1.5; flex:1; }
+  .name { font-size:.7rem; font-weight:600; margin-bottom:4px; }
+  .judge { background:#0d0d18; border:1px solid #2a2a3a; border-radius:10px; padding:12px 14px; font-size:.85rem; margin-top:8px; }
+</style>
+</head>
+<body>
+  <h1>THE ROUNDTABLE</h1>
+  <div class="sub">GPT · Claude · Gemini argue toward one answer</div>
+  <div class="ask">
+    <textarea id="q" placeholder="Ask the roundtable anything...">Should we ship the bar-top configurator to production this week?</textarea>
+    <button class="btn" onclick="run()" style="margin-top:10px">CONVENE</button>
+  </div>
+  <div id="out"></div>
+<script>
+const ROUNDS=[
+  {m:'GPT',a:'#10a37f',n:'GPT-4',t:'Ship it. The v20 inputs already capture what we need to quote. Waiting costs us the Apple demo next week.'},
+  {m:'Claude',a:'#d97757',n:'Claude',t:'Hold. The preview doesn't reflect finish grain yet — a client will notice. One more polish pass, two days.'},
+  {m:'Gemini',a:'#4285f4',n:'Gemini',t:'Middle path: ship the calculator live, gate the 3D preview behind a toggle. Demo-ready without the risk.'},
+];
+function run(){
+  const q=document.getElementById('q').value;
+  let html='';
+  ROUNDS.forEach(r=>{
+    html+=`<div class="round"><div class="model"><div class="avatar" style="background:${r.a}">${r.m[0]}</div><div class="bubble"><div class="name" style="color:${r.a}">${r.n}</div>${r.t}</div></div></div>`;
+  });
+  html+=`<div class="judge"><b style="color:#7c5cff">JUDGE:</b> Gemini's gated approach wins. Confidence 72% — ship calculator now, preview toggle next sprint. No model is certain; the operator breaks the tie.</div>`;
+  document.getElementById('out').innerHTML=html;
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEWEN Decision Engine</title>
+<style>
+  :root { --bg:#07070a; --steel:#aab; --accent:#7c5cff; --panel:#101018; --green:#2ecc71; --amber:#f1c40f; --red:#e74c3c; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--steel); font-family:'Inter',system-ui,sans-serif; padding:24px; max-width:800px; }
+  h1 { font-size:1.3rem; letter-spacing:.08em; margin-bottom:4px; }
+  .sub { color:#555; font-size:.8rem; margin-bottom:20px; }
+  .input { background:var(--panel); border:1px solid #1c1c28; border-radius:12px; padding:16px; margin-bottom:16px; }
+  textarea { width:100%; background:#0a0a12; border:1px solid #222; color:var(--steel); padding:12px; border-radius:8px; font-size:.9rem; min-height:80px; resize:vertical; }
+  .btn { background:var(--accent); color:#fff; border:none; padding:12px 20px; border-radius:8px; font-weight:600; cursor:pointer; width:100%; margin-top:8px; }
+  .verdict { background:var(--panel); border:1px solid #1c1c28; border-radius:12px; padding:20px; margin-top:16px; display:none; }
+  .verdict.show { display:block; }
+  .score { font-size:2.4rem; font-weight:700; }
+  .bar { height:6px; background:#1a1a28; border-radius:3px; margin:10px 0; overflow:hidden; }
+  .bar > div { height:100%; transition:.5s; }
+  .reason { font-size:.85rem; color:#888; margin-top:8px; line-height:1.5; }
+  .tag { display:inline-block; font-size:.65rem; padding:3px 8px; border-radius:4px; margin-right:6px; }
+</style>
+</head>
+<body>
+  <h1>DECISION ENGINE</h1>
+  <div class="sub">Multi-factor scoring · confidence hard-capped · no fake certainty</div>
+  <div class="input">
+    <label style="font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;color:#666">Decision / question</label>
+    <textarea id="q" placeholder="e.g. Should we take the Apple campus job at this margin?"></textarea>
+    <div style="display:flex;gap:12px;margin-top:12px">
+      <div style="flex:1"><label style="font-size:.7rem;color:#666">Impact (1-10)</label><input id="imp" type="range" min="1" max="10" value="7" style="width:100%"></div>
+      <div style="flex:1"><label style="font-size:.7rem;color:#666">Effort (1-10)</label><input id="eff" type="range" min="1" max="10" value="5" style="width:100%"></div>
+      <div style="flex:1"><label style="font-size:.7rem;color:#666">Risk (1-10)</label><input id="risk" type="range" min="1" max="10" value="4" style="width:100%"></div>
+    </div>
+    <button class="btn" onclick="decide()">SCORE IT</button>
+  </div>
+  <div class="verdict" id="v">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div class="score" id="sc">—</div>
+      <div id="conf"></div>
+    </div>
+    <div class="bar"><div id="bfill"></div></div>
+    <div class="reason" id="why"></div>
+  </div>
+<script>
+function decide(){
+  const imp=+document.getElementById('imp').value;
+  const eff=+document.getElementById('eff').value;
+  const risk=+document.getElementById('risk').value;
+  const score=Math.round((imp*3 - eff*1.5 - risk*2 + 50));
+  const conf=Math.min(85, 40 + imp*3 - risk*2);
+  const color = score>=60?'#2ecc71':score>=40?'#f1c40f':'#e74c3c';
+  const label = score>=60?'GO':score>=40?'MAYBE':'NO';
+  document.getElementById('sc').textContent=score;
+  document.getElementById('sc').style.color=color;
+  document.getElementById('conf').innerHTML=`<span class="tag" style="background:${color}22;color:${color}">${label}</span> <span style="font-size:.75rem;color:#666">confidence ${conf}%</span>`;
+  document.getElementById('bfill').style.width=score+'%';
+  document.getElementById('bfill').style.background=color;
+  document.getElementById('why').innerHTML=`Impact ${imp}/10 drives upside. Effort ${eff}/10 costs time. Risk ${risk}/10 caps confidence at ${conf}%. Score is a signal, not a verdict — the operator decides.`;
+  document.getElementById('v').classList.add('show');
+}
+</script>
+</body>
+</html>
